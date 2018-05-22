@@ -3,6 +3,13 @@ var count = 0;
 var users = {};
 
 var server = net.createServer(function (conn) {
+  function broadcest(msg, exceptMyself) {
+    for (var i in users) {
+      if (!exceptMyself || i != nickname) {
+        users[i].write(msg);
+      }
+    }
+  }
   var nickname;
   count++;
   conn.setEncoding('utf8');
@@ -13,6 +20,8 @@ var server = net.createServer(function (conn) {
   );
   conn.on('close', function () {
     count--;
+    delete users[nickname];
+    broadcest('\033[90m> ' + nickname + ' left the room\033[39m\n');
   });
   conn.on('data', function (data) {
     data = data.replace('\r\n', '');
