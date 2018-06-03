@@ -1,12 +1,17 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function (req, res) {
-  var responseObject = {
-    name: "test01"
-  };
-  res.send(responseObject);
+  console.log(req.query);
+  res.send(req.query.test);
+});
+
+app.post('/', function (req, res) {
+  console.log(req.body);
+  res.send(req.body.test);
 });
 
 app.listen(3000);
